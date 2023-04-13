@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dice</title>
+    
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Tilt+Prism&display=swap');
+      *{
+        margin: 0px;
+        padding: 0px;
+      }
+      #container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: aquamarine;
+        justify-content: center;
+      }
+      #heading{
+        font-family: 'Tilt Prism', cursive;
+        font-size: 45px;
+      }
+      #arena {
+        text-align: center;
+        width: 90vw;
+        max-width: 400px;
+        display: flex;
+        justify-content: space-between;
+        margin-block: 20px;
+      }
+      
+      .dice {
+        height: 150px;
+        width: 150px;
+        margin-top: 10px;
+      }
+      #result {
+        height: 100px;
+        margin-block: 20px;
+        font-size: 24px;
+      }
+      button {
+        padding: 20px 30px;
+        border-radius: 20px;
+        margin-inline: 20px;
+        cursor: pointer;
+        transition: all 0.5s;
+      }
+      button:hover {
+        background: black;
+        color: white;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="container">
+      <h1 id="heading">Dice Game</h1>
+      <hr />
+      <div id="arena">
+        <div><h2>Player 1</h2>
+        <img src="" alt="" class="dice" />
+    </div>
+    <div><h2>Player 2</h2>
+        <img src="" alt="" class="dice" />
+    </div>
+      </div>
+      <h2>Result will be displayed below here &darr;</h2>
+      <div id="result"></div>
+      <div id="buttons">
+        <button id="start">Start</button>
+        <button id="reset">Reset</button>
+      </div>
+    </div>
+
+    <script>
+      let dice = ["1.svg", "2.svg", "3.svg", "4.svg", "5.svg", "6.svg"];
+      let img = document.querySelectorAll("img");
+      img[0].src = "1.svg";
+      img[1].src = "1.svg";
+
+      let handleReset = () => {
+        img[0].src = "1.svg";
+        img[1].src = "1.svg";
+        result.innerHTML = "";
+      };
+      //   reset;
+      reset.addEventListener("click", handleReset);
+
+      start.addEventListener("click", () => {
+        start.disabled = true;
+        reset.disabled= true;
+        let i = Math.floor(Math.random() * 6);
+        let j = Math.floor(Math.random() * 6);
+        img[0].src = dice[i];
+        img[1].src = dice[j];
+        let Prom = new Promise((resolve, reject) => {
+          if (i < j) {
+            resolve('Resolving promise as player 2 wins');
+
+          } else if(i==j){
+            reject('Rejecting promise as draw')
+          }
+          else {
+            resolve("Resolving promise as player 1 wins");
+          }
+        }).then(
+          (value) => {
+            let counter = 0;
+            result.innerHTML = "";
+            let interval = setInterval(() => {
+              result.innerHTML += value[counter];
+              if(counter > value.length - 2){
+                start.disabled= false;
+                reset.disabled = false;
+                clearInterval(interval);
+              }
+              counter++;
+            }, 50);
+          },
+          (err) => {
+            let counter = 0;
+            result.innerHTML = "";
+            let interval = setInterval(() => {
+              result.innerHTML += err[counter];
+              if(counter > err.length - 2){
+                start.disabled = false;
+                reset.disabled = false;
+                clearInterval(interval);
+              } 
+              counter++;
+            }, 50);
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
